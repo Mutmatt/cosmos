@@ -3,6 +3,7 @@ import styled, { css } from '../../styled'
 import { fonts, colors, spacing } from '../../tokens'
 import Link, { StyledLink } from '../link'
 import Text from '../text'
+import Button from '../button'
 import FreeText from '../../_helpers/free-text'
 import Automation from '../../_helpers/automation-attribute'
 import Icon, { __ICONNAMES__ } from '../icon'
@@ -95,18 +96,32 @@ class Alert extends React.Component<IAlertProps, IAlertState> {
           dismissible={this.props.dismissible}
           {...Automation('alert')}
           {...rootProps(this.props)}
+          role="alert"
         >
-          {this.props.icon && <Icon name={this.props.icon} color={iconColorMap[appearance]} />}
-          <span>
+          {this.props.icon && (
+            <AlertIcon>
+              <Icon name={this.props.icon} color={iconColorMap[appearance]} />
+            </AlertIcon>
+          )}
+
+          <AlertContent>
             <Text type="strong">{this.props.title}</Text> <FreeText {...this.props} />
             {this.props.link && (
               <ReadMoreLink appearance="default" href={this.props.link} target="_blank">
                 Read more
               </ReadMoreLink>
             )}
-          </span>
+          </AlertContent>
+
           {this.props.dismissible && (
-            <Cross onClick={this.dismiss} {...Automation('alert.dismiss')} />
+            <Button
+              aria-label="Close"
+              size="default"
+              appearance="link"
+              icon="close"
+              onClick={this.dismiss}
+              {...Automation('alert.dismiss')}
+            />
           )}
         </Alert.Element>
       )
@@ -114,38 +129,26 @@ class Alert extends React.Component<IAlertProps, IAlertState> {
   }
 }
 
-const Cross = styled.a`
-  cursor: pointer;
-  font-size: 1.5em;
-  line-height: 1;
-  &:after {
-    content: '×';
-    font-weight: ${fonts.weight.bold};
-  }
-`
-
-const styledForCross = css`
-  padding-right: ${spacing.large};
-`
-
 Alert.Element = styled.div<IAlertElementProps>`
   ${containerStyles};
-  padding: ${spacing.small} ${spacing.small};
-  ${props => props.dismissible && styledForCross};
 
+  padding: ${spacing.small} ${props => (props.dismissible === true ? '40px' : 'spacing.small')}
+    ${spacing.small} ${spacing.small};
   background-color: ${props => colors.alert[props.appearance].background};
   color: ${props => colors.alert[props.appearance].text};
   border-radius: 3px;
   position: relative;
   display: flex;
+
   ${Icon.Element} {
-    margin-right: 12px;
+    display: block;
     position: relative;
     top: 1px;
     path {
       fill: ${props => colors.alert[props.appearance].text};
     }
   }
+
   ${StyledLink} {
     color: ${props => colors.alert[props.appearance].text};
     text-decoration: underline;
@@ -153,18 +156,24 @@ Alert.Element = styled.div<IAlertElementProps>`
       text-decoration: none;
     }
   }
-  ${Cross} {
+  ${Button.Element} {
     position: absolute;
     right: 0;
-    top: 0;
-    color: ${props => colors.alert[props.appearance].text};
-    opacity: 0.3;
+    top: 2px;
+    opacity: 0.5;
     padding: ${spacing.small} ${spacing.small};
-    &:hover {
-      opacity: 0.5;
+    &:hover,
+    &:focus {
+      opacity: 1;
     }
   }
 `
+
+const AlertIcon = styled.div`
+  margin-right: 12px;
+`
+
+const AlertContent = styled.div``
 
 /*
   Icon only accepts colors from colors.base
