@@ -11,7 +11,7 @@
   "author": "siddharthkp",
   "license": "MIT",
   "dependencies": {
-    "@auth0/babel-preset-cosmos": "0.7.2",
+    "@auth0/babel-preset-cosmos": "0.23.1",
     "awesome-typescript-loader": "^5.2.1",
     "babel-core": "6.26.3",
     "babel-loader": "7.1.4",
