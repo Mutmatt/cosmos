@@ -45,6 +45,6 @@
   },
   "dependencies": {
     "enzyme-to-json": "^3.3.4",
-    "jest-dom": "3.0.0"
+    "jest-dom": "3.5.0"
   }
 }
